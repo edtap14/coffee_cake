@@ -1,6 +1,6 @@
 // OBJETO CON PROPIEDADES DEL EFECTO SCROLL
 const propScroll = {
-    position: window.pageYOffset,
+    posicion: window.pageYOffset,
     scroll_suave: document.getElementsByClassName('scroll-suave'),
     volver_arriba: document.getElementsByClassName('volver-arriba'),
     destino: null,
@@ -19,24 +19,48 @@ const metScroll = {
     },
     moverse: function (e) {
         e.preventDefault()
+        clearInterval(propScroll.intervalo)
         propScroll.destino = this.getAttribute('href')
-        propScroll.seccion_distancia = document.querySelector(propScroll.destino).offsetTop
+        propScroll.seccion_distancia = document.querySelector(propScroll.destino).offsetTop - 94
         // console.log(propScroll.seccion_distancia)
 
-        propScroll.position = window.pageYOffset
+        propScroll.posicion = window.pageYOffset
         propScroll.intervalo = setInterval(function () {
-            if (propScroll.position < propScroll.seccion_distancia) {
+            if (propScroll.posicion < propScroll.seccion_distancia) {
 
-                propScroll.position += 30;
+                propScroll.posicion += 30;
 
-                if (propScroll.position >= propScroll.seccion_distancia) {
+                if (propScroll.posicion >= propScroll.seccion_distancia) {
                     clearInterval(propScroll.intervalo)
                 }
             } else{
-                propScroll
+                propScroll.posicion -= 30
+
+                if(propScroll.posicion <= propScroll.seccion_distancia){
+                    clearInterval(propScroll.intervalo)
+                }
             }
-            window.scrollTo(0, propScroll.position)
+            window.scrollTo(0, propScroll.posicion)
         }, 15)
+    },
+    subir: function(e){
+        e.preventDefault()
+        clearInterval(propScroll.intervalo)
+        propScroll.posicion = window.pageYOffset
+        propScroll.intervalo = setInterval(function(){
+            if(propScroll.posicion > 0){
+                propScroll.posicion -= 30
+
+                if(propScroll.posicion <= 0){
+                    clearInterval(propScroll.intervalo)
+                }
+            } else{
+                return
+            }
+
+            window.scrollTo(0, propScroll.posicion)
+        },15)
+
     }
 }
 
